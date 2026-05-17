@@ -35,7 +35,7 @@ public class TeachersForm extends JFrame {
 
         DefaultTableModel table = new DefaultTableModel();
         try(Connection con = ConnectionBD.connectionDB()) {
-            String sql = "SELECT * FROM \"Student\" ";
+            String sql = "SELECT * FROM \"Teacher\" ";
             PreparedStatement prpQuery = con.prepareStatement(sql);
             ResultSet result = prpQuery.executeQuery();
             ResultSetMetaData rMetaData = result.getMetaData();
@@ -75,12 +75,39 @@ public class TeachersForm extends JFrame {
 
         mainPanel.add(scrollPane);
 
-        JPanel buttonJPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        JPanel buttonJPanel = new JPanel();
+        buttonJPanel.setLayout(new BoxLayout(buttonJPanel, BoxLayout.Y_AXIS));
+        buttonJPanel.setBorder(new EmptyBorder(80, 20, 90, 20));
+
+        String[]  nameButton = {"Добавить", "Удалить", "Изменить данные", "Назад"};
+        int count = 0;
+        for (String item : nameButton) {
+            JButton menuButton = new JButton(item);
+            menuButton.setSize(80, 30);
+            menuButton.setFont(new Font("Arial", Font.PLAIN, 14));
+            if (count == 0)
+                menuButton.addActionListener(e -> {
+                    AddTeacherForm teacherForm = new AddTeacherForm(this);
+                    teacherForm.setVisible(true);
+                    this.dispose();
+                });
+
+            if (count == 3)
+                menuButton.addActionListener(e -> {
+                    parrentForm.setVisible(true);
+                    this.dispose();
+                });
+            buttonJPanel.add(menuButton);
+            buttonJPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+            count++;
+        }
+
+
+        mainPanel.add(buttonJPanel);
 
 
 
-
-        add(mainPanel, BorderLayout.EAST);
+        add(mainPanel, BorderLayout.CENTER);
     }
 
 }

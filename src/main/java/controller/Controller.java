@@ -1,7 +1,7 @@
 package controller;
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
+
 
 import models.User;
 
@@ -22,6 +22,22 @@ public class Controller {
         String[] blockedStringses = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
         for (String digit: blockedStringses) {
             if (surnameString.contains(digit) || nameString.contains(digit) || patronymicString.contains(digit)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean addNewTeacherCheckAccept(String name, String patronymic, String surname, String number, String email, String specialization, String date, String gender)
+    {
+        return !(name.isEmpty() || patronymic.isEmpty() || surname.isEmpty() || number.isEmpty() || email.isEmpty() || specialization.isEmpty() || date.isEmpty() || gender.isEmpty());
+    }
+
+    public boolean addNewTeacherCheckNotNumber(String name, String patronymic, String surname, String specialization)
+    {
+        String[] blockedStringses = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
+        for (String digit: blockedStringses) {
+            if (name.contains(digit) || patronymic.contains(digit) || surname.contains(digit) || specialization.contains(digit)) {
                 return false;
             }
         }
@@ -69,6 +85,31 @@ public class Controller {
             prpQuery.setString(5, name);
             prpQuery.setString(6, patronymic);
             prpQuery.setDate(7, Date.valueOf(ld));
+
+            int rowsAffected = prpQuery.executeUpdate();
+            return rowsAffected > 0; // вернет true если запись добавлена
+        } catch (SQLException | ClassNotFoundException ex) {
+            System.err.println("Ошибка при добавлении пользователя: " + ex.getMessage());
+            return false;
+        }
+    }
+
+    public boolean addNewTeacher(String surname, String name, String patronymic, LocalDate date, String gender, String number, String email, String specialization) {
+        try (Connection con = ConnectionBD.connectionDB())
+        {
+            String sql = "INSERT INTO \"Teacher\"(\"Surname\", \"Name\", \"Patronymic\", \"Date\", \"Gender\", \"Number\", \"Email\" ,\"RegisterDate\", \"Specialization\") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement prpQuery = con.prepareStatement(sql);
+            LocalDate ld = LocalDate.now();
+
+            prpQuery.setString(1, surname);
+            prpQuery.setString(2, name);
+            prpQuery.setString(3, patronymic);
+            prpQuery.setDate(4, Date.valueOf(date));
+            prpQuery.setString(5, gender);
+            prpQuery.setString(6, number);
+            prpQuery.setString(7, email);
+            prpQuery.setString(9, specialization);
+            prpQuery.setDate(8, Date.valueOf(ld));
 
             int rowsAffected = prpQuery.executeUpdate();
             return rowsAffected > 0; // вернет true если запись добавлена

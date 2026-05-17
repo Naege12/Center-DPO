@@ -88,6 +88,12 @@ public class FormSysAdmin extends JFrame {
                     studentsForm.setVisible(true);
                     this.dispose();
                 });
+            if (count == 0)
+                menuButton.addActionListener( e -> {
+                    TeachersForm teacher = new TeachersForm(this);
+                    teacher.setVisible(true);
+                    this.dispose();
+                });
             menJPanel.add(menuButton);
             count++;
         }

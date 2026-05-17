@@ -4,7 +4,11 @@
  */
 package view;
 
-import javax.swing.JFrame;
+import controller.Controller;
+
+import javax.swing.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -16,9 +20,11 @@ public class AddTeacherForm extends javax.swing.JFrame {
      * Creates new form AddStudentForm
      */
     JFrame parentFrame;
+    Controller con;
     public AddTeacherForm(JFrame j) {
         initComponents();
         parentFrame = j;
+        con = new Controller();
     }
 
     /**
@@ -39,22 +45,22 @@ public class AddTeacherForm extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
+        dateJTextPane = new javax.swing.JTextPane();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextPane2 = new javax.swing.JTextPane();
+        nameJTextPane = new javax.swing.JTextPane();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextPane3 = new javax.swing.JTextPane();
+        patronymivJTextPane = new javax.swing.JTextPane();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTextPane4 = new javax.swing.JTextPane();
+        SurnameJTextPane = new javax.swing.JTextPane();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jTextPane5 = new javax.swing.JTextPane();
+        emailJTextPane = new javax.swing.JTextPane();
         jScrollPane6 = new javax.swing.JScrollPane();
-        jTextPane6 = new javax.swing.JTextPane();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        numberJTextPane = new javax.swing.JTextPane();
+        genderJComboBox = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         jScrollPane7 = new javax.swing.JScrollPane();
-        jTextPane7 = new javax.swing.JTextPane();
+        specializationJTextPane = new javax.swing.JTextPane();
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -83,27 +89,32 @@ public class AddTeacherForm extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel8.setText("Номер:");
 
-        jScrollPane1.setViewportView(jTextPane1);
+        jScrollPane1.setViewportView(dateJTextPane);
 
-        jScrollPane2.setViewportView(jTextPane2);
+        jScrollPane2.setViewportView(nameJTextPane);
 
-        jScrollPane3.setViewportView(jTextPane3);
+        jScrollPane3.setViewportView(patronymivJTextPane);
 
-        jScrollPane4.setViewportView(jTextPane4);
+        jScrollPane4.setViewportView(SurnameJTextPane);
 
-        jScrollPane5.setViewportView(jTextPane5);
+        jScrollPane5.setViewportView(emailJTextPane);
 
-        jScrollPane6.setViewportView(jTextPane6);
+        jScrollPane6.setViewportView(numberJTextPane);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "М", "Ж", "Дима", " ", " " }));
+        genderJComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "М", "Ж", "Дима", " ", " " }));
 
         jButton1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jButton1.setText("Добавить");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel9.setText("Почта:");
 
-        jScrollPane7.setViewportView(jTextPane7);
+        jScrollPane7.setViewportView(specializationJTextPane);
 
         jButton2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jButton2.setText("Вернутся");
@@ -136,7 +147,7 @@ public class AddTeacherForm extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(genderJComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -181,7 +192,7 @@ public class AddTeacherForm extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel7)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(genderJComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel8))
                     .addGroup(layout.createSequentialGroup()
@@ -207,14 +218,40 @@ public class AddTeacherForm extends javax.swing.JFrame {
         parentFrame.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if(con.addNewTeacherCheckAccept(nameJTextPane.getText(), patronymivJTextPane.getText(), SurnameJTextPane.getText(),
+                numberJTextPane.getText(), emailJTextPane.getText(), specializationJTextPane.getText(),
+                dateJTextPane.getText(), (String) genderJComboBox.getSelectedItem())
+                && con.addNewTeacherCheckNotNumber(nameJTextPane.getText(), patronymivJTextPane.getText(), SurnameJTextPane.getText(), specializationJTextPane.getText())) {
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+            LocalDate date = LocalDate.parse(dateJTextPane.getText(), formatter);
+            LocalDate ld = LocalDate.now();
+
+            if (con.addNewTeacher(SurnameJTextPane.getText(), nameJTextPane.getText(), patronymivJTextPane.getText(), date,
+                    (String) genderJComboBox.getSelectedItem(), numberJTextPane.getText(),
+                    emailJTextPane.getText(), specializationJTextPane.getText())) {
+                JOptionPane.showMessageDialog(this, "Учитель успешно добален");
+
+            }
+        }
+        else
+        {
+         JOptionPane.showMessageDialog(this, "Заполниет все поля или уберите цифры из полей: Имя, Отчество, Фамилия, Специальзация!", "Ошибка" , JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextPane SurnameJTextPane;
+    private javax.swing.JTextPane dateJTextPane;
+    private javax.swing.JTextPane emailJTextPane;
+    private javax.swing.JComboBox<String> genderJComboBox;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -231,12 +268,9 @@ public class AddTeacherForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
-    private javax.swing.JTextPane jTextPane1;
-    private javax.swing.JTextPane jTextPane2;
-    private javax.swing.JTextPane jTextPane3;
-    private javax.swing.JTextPane jTextPane4;
-    private javax.swing.JTextPane jTextPane5;
-    private javax.swing.JTextPane jTextPane6;
-    private javax.swing.JTextPane jTextPane7;
+    private javax.swing.JTextPane nameJTextPane;
+    private javax.swing.JTextPane numberJTextPane;
+    private javax.swing.JTextPane patronymivJTextPane;
+    private javax.swing.JTextPane specializationJTextPane;
     // End of variables declaration//GEN-END:variables
 }

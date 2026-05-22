@@ -35,7 +35,7 @@ public class TeachersForm extends JFrame {
 
         DefaultTableModel table = new DefaultTableModel();
         try(Connection con = ConnectionBD.connectionDB()) {
-            String sql = "SELECT * FROM \"Teacher\" ";
+            String sql = "SELECT \"Surname\" AS Фамилия, \"Name\" as Имя, \"Patronymic\" as Отчество, \"Date\" as \"Дата рождения\", \"Gender\" as Пол, \"Number\" AS \"Номер телефона\", \"Email\" as Почта, \"RegisterDate\" AS \"Дата регистрации\", \"Specialization\" as Специализация From \"Teacher\" ";
             PreparedStatement prpQuery = con.prepareStatement(sql);
             ResultSet result = prpQuery.executeQuery();
             ResultSetMetaData rMetaData = result.getMetaData();

@@ -82,6 +82,12 @@ public class FormSysAdmin extends JFrame {
                     course.setVisible(true);
                     this.dispose();
                 });
+            if (count == 2)
+                menuButton.addActionListener(e -> {
+                    ProgrammForm programmForm = new ProgrammForm(this);
+                    programmForm.setVisible(true);
+                    this.dispose();
+                });
             if (count == 1)
                 menuButton.addActionListener(e -> {
                     StudentsForm studentsForm = new StudentsForm(this);

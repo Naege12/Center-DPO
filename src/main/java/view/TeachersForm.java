@@ -79,20 +79,20 @@ public class TeachersForm extends JFrame {
         buttonJPanel.setLayout(new BoxLayout(buttonJPanel, BoxLayout.Y_AXIS));
         buttonJPanel.setBorder(new EmptyBorder(80, 20, 90, 20));
 
-        String[]  nameButton = {"Добавить", "Удалить", "Изменить данные", "Назад"};
+        String[]  nameButton = {"Экспорт в XML", "Добавить", "Удалить", "Изменить данные", "Назад"};
         int count = 0;
         for (String item : nameButton) {
             JButton menuButton = new JButton(item);
             menuButton.setSize(80, 30);
             menuButton.setFont(new Font("Arial", Font.PLAIN, 14));
-            if (count == 0)
+            if (count == 1)
                 menuButton.addActionListener(e -> {
                     AddTeacherForm teacherForm = new AddTeacherForm(this);
                     teacherForm.setVisible(true);
                     this.dispose();
                 });
 
-            if (count == 3)
+            if (count == 4)
                 menuButton.addActionListener(e -> {
                     parrentForm.setVisible(true);
                     this.dispose();

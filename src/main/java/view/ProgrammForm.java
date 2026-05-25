@@ -1,39 +1,39 @@
 package view;
 
 import controller.ConnectionBD;
-import java.awt.*;
-import java.sql.*;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.sql.*;
 
-
-public class CourseForm extends JFrame {
+public class ProgrammForm extends JFrame {
     JFrame parent;
-    public CourseForm(JFrame jf)
+    public ProgrammForm(JFrame jf)
     {
         initComponent();
         parent = jf;
     }
-    
+
     private void initComponent()
     {
-        setTitle("Окно просмотра курсов");
+        setTitle("Окно просмотра программ обучения");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(700, 500);
-        
+
         setLocationRelativeTo(null);
-        
+
         setResizable(false);
-        
+
         setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
-        
+
         JPanel menJPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         menJPanel.setBorder(new EmptyBorder(10, 20, 10, 20));
-        
+
         DefaultTableModel table = new DefaultTableModel();
         try(Connection con = ConnectionBD.connectionDB()) {
-            String sql = "SELECT \"Name\" AS Курс, \"max_students\" AS \"Количество студентов\", \"StartDate\" AS Начало, \"EndDate\" AS Конец FROM \"Course\" ";
+            String sql = "SELECT \"Name\" AS Программа, \"Description\" AS Описание, \"Duration\" AS Длительность, \"Category\" AS Категория FROM \"Program\" ";
             PreparedStatement prpQuery = con.prepareStatement(sql);
             ResultSet result = prpQuery.executeQuery();
             ResultSetMetaData rMetaData = result.getMetaData();
@@ -42,14 +42,14 @@ public class CourseForm extends JFrame {
             {
                 table.addColumn(rMetaData.getColumnLabel(i));
             }
-           
+
             while (result.next()) {
                 Object[] row = new Object[count];
                 for (int i = 1; i <= count; i++) {
                     row[i - 1] = result.getObject(i);
-                 
+
                     if (result.wasNull()) {
-                        row[i - 1] = "Н/Д"; 
+                        row[i - 1] = "Н/Д";
                     }
                 }
                 table.addRow(row);
@@ -58,28 +58,28 @@ public class CourseForm extends JFrame {
         }
         catch(SQLException | ClassNotFoundException ex )
         {
-           ex.printStackTrace();
-           
-            javax.swing.JOptionPane.showMessageDialog(this, 
-                "Ошибка загрузки данных: " + ex.getMessage(),
-                "Ошибка",
-                javax.swing.JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Ошибка загрузки данных: " + ex.getMessage(),
+                    "Ошибка",
+                    javax.swing.JOptionPane.ERROR_MESSAGE);
         }
-        
-         JTable _table = new JTable(table);
-        
-      
+
+        JTable _table = new JTable(table);
+
+
         JScrollPane scrollPane = new JScrollPane(_table);
-        
-     
+
+
         JPanel mainJPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         mainJPanel.setBorder(new EmptyBorder(10, 20, 10, 20));
         mainJPanel.add(scrollPane);
-        
+
 
         _table.setAutoCreateRowSorter(true);
-        
-     
+
+
         _table.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         JPanel buttonJPanel = new JPanel();

@@ -78,7 +78,7 @@ public class StudentsForm extends JFrame {
         mainJPanel.add(scrollPane);
 
 
-        add(mainJPanel, BorderLayout.EAST);
+
 
 
         _table.setAutoCreateRowSorter(true);
@@ -86,14 +86,35 @@ public class StudentsForm extends JFrame {
 
         _table.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-        JPanel buttonJPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        JButton exitButton = new JButton("Выход");
-        exitButton.addActionListener(e -> {
-            parent.setVisible(true);
-            this.dispose();
-        });
-        buttonJPanel.add(exitButton);
+        JPanel buttonJPanel = new JPanel();
+        buttonJPanel.setLayout(new BoxLayout(buttonJPanel, BoxLayout.Y_AXIS));
+        buttonJPanel.setBorder(new EmptyBorder(80, 20, 90, 20));
 
-        add(buttonJPanel, BorderLayout.WEST);
+        String[]  nameButton = {"Экспорт в XML", "Добавить", "Удалить", "Изменить данные", "Назад"};
+        int count = 0;
+        for (String item : nameButton) {
+            JButton menuButton = new JButton(item);
+            menuButton.setSize(80, 30);
+            menuButton.setFont(new Font("Arial", Font.PLAIN, 14));
+            if (count == 1)
+                menuButton.addActionListener(e -> {
+                    AddTeacherForm teacherForm = new AddTeacherForm(this);
+                    teacherForm.setVisible(true);
+                    this.dispose();
+                });
+
+            if (count == 4)
+                menuButton.addActionListener(e -> {
+                    parent.setVisible(true);
+                    this.dispose();
+                });
+            buttonJPanel.add(menuButton);
+            buttonJPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+            count++;
+        }
+
+
+        mainJPanel.add(buttonJPanel);
+        add(mainJPanel, BorderLayout.EAST);
     }
 }

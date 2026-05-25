@@ -1,26 +1,27 @@
 package view;
 
 import controller.ConnectionBD;
-import controller.JTableXmlExporter;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.*;
 
-public class TeachersForm extends JFrame {
-
+public class DeleteTeacherForm extends JFrame
+{
     private JFrame parrentForm;
     private JTable _table;
-    public TeachersForm(JFrame parrentForm)
+
+    public DeleteTeacherForm(JFrame parrentForm)
     {
         this.parrentForm = parrentForm;
-        InitComponent();
+        initComponent();
     }
 
-    void InitComponent()
+    private void initComponent()
     {
-        setTitle("Учителя");
+        setTitle("Удаление учителя");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(800, 700);
 
@@ -96,7 +97,6 @@ public class TeachersForm extends JFrame {
             menuButton.setSize(80, 30);
             menuButton.setFont(new Font("Arial", Font.PLAIN, 14));
             if (count == 0) {
-                menuButton.addActionListener(e -> exportToXml());
             }
 
             if (count == 1)
@@ -105,15 +105,6 @@ public class TeachersForm extends JFrame {
                     teacherForm.setVisible(true);
                     this.dispose();
                 });
-
-            if (count == 2)
-            {
-                menuButton.addActionListener(e -> {
-                    DeleteTeacherForm delete = new DeleteTeacherForm(this);
-                    delete.setVisible(true);
-                    this.dispose();
-                });
-            }
 
             if (count == 4)
                 menuButton.addActionListener(e -> {
@@ -125,35 +116,7 @@ public class TeachersForm extends JFrame {
             count++;
         }
 
-
         mainPanel.add(buttonJPanel);
-
-
-
         add(mainPanel, BorderLayout.CENTER);
     }
-
-    private void exportToXml() {
-        if (_table.getRowCount() == 0) {
-            JOptionPane.showMessageDialog(this,
-                    "Нет данных для экспорта",
-                    "Информация",
-                    JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
-
-        // Экспортируем все данные таблицы в XML
-        JTableXmlExporter.exportAll(
-                _table,                    // ваша таблица
-                "teachers",                // корневой тег
-                "teacher",                 // тег одной записи
-                "teachers_export.xml"      // имя файла
-        );
-
-        JOptionPane.showMessageDialog(this,
-                "Экспорт завершён!\nФайл: teachers_export.xml",
-                "Успех",
-                JOptionPane.INFORMATION_MESSAGE);
-    }
-
 }

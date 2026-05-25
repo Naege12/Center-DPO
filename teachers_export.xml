@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<teachers>
+    <teacher>
+        <surname>test</surname>
+        <name>test</name>
+        <patronymic>test</patronymic>
+        <birth_date>2000-02-20</birth_date>
+        <gender>М</gender>
+        <phone>test</phone>
+        <email>test</email>
+        <register_date>2026-05-17 00:00:00.0</register_date>
+        <specialization>test</specialization>
+    </teacher>
+    <teacher>
+        <surname>test</surname>
+        <name>test</name>
+        <patronymic>test</patronymic>
+        <birth_date>2000-02-20</birth_date>
+        <gender>М</gender>
+        <phone>test</phone>
+        <email>test</email>
+        <register_date>2026-05-17 00:00:00.0</register_date>
+        <specialization>test</specialization>
+    </teacher>
+    <teacher>
+        <surname>Тестов</surname>
+        <name>Тест</name>
+        <patronymic>Тестович</patronymic>
+        <birth_date>1920-01-23</birth_date>
+        <gender>М</gender>
+        <phone>тест</phone>
+        <email>тест</email>
+        <register_date>2026-05-17 00:00:00.0</register_date>
+        <specialization>тест</specialization>
+    </teacher>
+</teachers>

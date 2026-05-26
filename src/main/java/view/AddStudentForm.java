@@ -4,7 +4,11 @@
  */
 package view;
 
-import javax.swing.JFrame;
+import controller.Controller;
+
+import javax.swing.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -16,6 +20,7 @@ public class AddStudentForm extends javax.swing.JFrame {
      * Creates new form AddStudentForm
      */
     JFrame parentForm;
+    Controller con = new Controller();
     public AddStudentForm(JFrame f) {
         initComponents();
         parentForm = f;
@@ -96,6 +101,11 @@ public class AddStudentForm extends javax.swing.JFrame {
 
         AddjButton.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         AddjButton.setText("Добавить");
+        AddjButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddjButtonActionPerformed(evt);
+            }
+        });
 
         ExitjButton.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         ExitjButton.setText("Вернутся");
@@ -186,10 +196,34 @@ public class AddStudentForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void ExitjButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExitjButtonActionPerformed
-        // TODO add your handling code here:
+
         this.dispose();
         parentForm.setVisible(true);
     }//GEN-LAST:event_ExitjButtonActionPerformed
+
+    private void AddjButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddjButtonActionPerformed
+        if(con.addNewStudentCheckAccept(NamejTextPane.getText(), PatronymicjTextPane.getText(), SurnamejTextPane.getText(),
+                NumberjTextPane6.getText(), EmailjTextPane.getText(),
+                DatejTextPane.getText(), (String) GenderjComboBox1.getSelectedItem())
+                && con.addNewStudentCheckNotNumber(NamejTextPane.getText(), PatronymicjTextPane.getText(), SurnamejTextPane.getText())) {
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+            LocalDate date = LocalDate.parse(DatejTextPane.getText(), formatter);
+            LocalDate ld = LocalDate.now();
+
+            if (con.addNewStudent(SurnamejTextPane.getText(), NamejTextPane.getText(), PatronymicjTextPane.getText(), date,
+                    (String) GenderjComboBox1.getSelectedItem(), NumberjTextPane6.getText(),
+                    EmailjTextPane.getText())) {
+                JOptionPane.showMessageDialog(this, "Студент успешно добален");
+
+            }
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(this, "Заполниет все поля или уберите цифры из полей: Имя, Отчество, Фамилия!", "Ошибка" , JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_AddjButtonActionPerformed
+    
 
     /**
      * @param args the command line arguments

@@ -1,6 +1,7 @@
 package view;
 
 import controller.ConnectionBD;
+import controller.Controller;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -10,6 +11,7 @@ import java.sql.*;
 
 public class DeleteTeacherForm extends JFrame
 {
+    private JTextField idField;
     private JFrame parrentForm;
     private JTable _table;
 
@@ -23,7 +25,7 @@ public class DeleteTeacherForm extends JFrame
     {
         setTitle("Удаление учителя");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(800, 700);
+        setSize(1000, 700);
 
         setLocationRelativeTo(null);
 
@@ -37,7 +39,8 @@ public class DeleteTeacherForm extends JFrame
 
         DefaultTableModel table = new DefaultTableModel();
         try(Connection con = ConnectionBD.connectionDB()) {
-            String sql = "SELECT \"Surname\" AS surname, " +
+            String sql = "SELECT \"id\" AS ID, " +
+                    "\"Surname\" AS surname, " +
                     "\"Name\" AS name, " +
                     "\"Patronymic\" AS patronymic, " +
                     "\"Date\" AS birth_date, " +
@@ -86,31 +89,56 @@ public class DeleteTeacherForm extends JFrame
 
         mainPanel.add(scrollPane);
 
+        JPanel inputPanel = new JPanel();
+        inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
+        inputPanel.setBorder(new EmptyBorder(80, 20, 90, 20));
+
+        JLabel idLabel = new JLabel("ID:");
+        idLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        inputPanel.add(idLabel);
+        inputPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        idField = new JTextField(15);
+        idField.setFont(new Font("Arial", Font.PLAIN, 14));
+        inputPanel.add(idField);
+
+        mainPanel.add(inputPanel);
+
         JPanel buttonJPanel = new JPanel();
         buttonJPanel.setLayout(new BoxLayout(buttonJPanel, BoxLayout.Y_AXIS));
         buttonJPanel.setBorder(new EmptyBorder(80, 20, 90, 20));
 
-        String[]  nameButton = {"Экспорт в XML", "Добавить", "Удалить", "Изменить данные", "Назад"};
+        String[]  nameButton = {"Удалить", "Назад"};  // поменял "Применить" на "Удалить"
         int count = 0;
         for (String item : nameButton) {
             JButton menuButton = new JButton(item);
             menuButton.setSize(80, 30);
             menuButton.setFont(new Font("Arial", Font.PLAIN, 14));
-            if (count == 0) {
-            }
 
             if (count == 1)
-                menuButton.addActionListener(e -> {
-                    AddTeacherForm teacherForm = new AddTeacherForm(this);
-                    teacherForm.setVisible(true);
-                    this.dispose();
-                });
-
-            if (count == 4)
                 menuButton.addActionListener(e -> {
                     parrentForm.setVisible(true);
                     this.dispose();
                 });
+
+
+            if (count == 0) {
+                menuButton.addActionListener(e -> {
+                    String id = idField.getText();
+                    if (!id.isEmpty()) {
+                        delete(id);
+                        idField.setText("");
+                    } else {
+                        JOptionPane.showMessageDialog(this,
+                                "Введите ID учителя",
+                                "Ошибка",
+                                JOptionPane.ERROR_MESSAGE);
+                                idField.setText("");
+                    }
+                });
+            }
+
+
             buttonJPanel.add(menuButton);
             buttonJPanel.add(Box.createRigidArea(new Dimension(0, 10)));
             count++;
@@ -118,5 +146,16 @@ public class DeleteTeacherForm extends JFrame
 
         mainPanel.add(buttonJPanel);
         add(mainPanel, BorderLayout.CENTER);
+    }
+
+    private void delete(String _id)
+    {
+        int id = Integer.parseInt(_id);
+        String sql = "DELETE FROM \"Teacher\" WHERE \"id\" = ?";
+        Controller con = new Controller();
+        if (con.isDeleted(id, sql))
+        {
+            JOptionPane.showMessageDialog(this, "Преподователь успешно удален");
+        }
     }
 }

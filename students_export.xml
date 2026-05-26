@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<students>
+    <student>
+        <surname>Мищенко </surname>
+        <name>Анастасия</name>
+        <patronymic>Михайловна</patronymic>
+        <birth_date>2008-02-10</birth_date>
+        <gender>Ж</gender>
+        <phone>+79544575687</phone>
+        <email>test@gmail.com</email>
+        <register_date>2024-01-15 12:30:00.0</register_date>
+    </student>
+</students>

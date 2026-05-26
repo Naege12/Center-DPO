@@ -43,6 +43,22 @@ public class Controller {
         }
         return true;
     }
+
+    public boolean addNewStudentCheckAccept(String name, String patronymic, String surname, String number, String email, String date, String gender)
+    {
+        return !(name.isEmpty() || patronymic.isEmpty() || surname.isEmpty() || number.isEmpty() || email.isEmpty() || date.isEmpty() || gender.isEmpty());
+    }
+
+    public boolean addNewStudentCheckNotNumber(String name, String patronymic, String surname)
+    {
+        String[] blockedStringses = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
+        for (String digit: blockedStringses) {
+            if (name.contains(digit) || patronymic.contains(digit) || surname.contains(digit)) {
+                return false;
+            }
+        }
+        return true;
+    }
     
     public int getAccept(String login, String passvord)
     {
@@ -119,6 +135,30 @@ public class Controller {
         }
     }
 
+    public boolean addNewStudent(String surname, String name, String patronymic, LocalDate date, String gender, String number, String email) {
+        try (Connection con = ConnectionBD.connectionDB())
+        {
+            String sql = "INSERT INTO \"Student\"(\"Surname\", \"Name\", \"Patronymic\", \"Date\", \"Gender\", \"Number\", \"Email\" ,\"RegisterDate\") VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement prpQuery = con.prepareStatement(sql);
+            LocalDate ld = LocalDate.now();
+
+            prpQuery.setString(1, surname);
+            prpQuery.setString(2, name);
+            prpQuery.setString(3, patronymic);
+            prpQuery.setDate(4, Date.valueOf(date));
+            prpQuery.setString(5, gender);
+            prpQuery.setString(6, number);
+            prpQuery.setString(7, email);
+            prpQuery.setDate(8, Date.valueOf(ld));
+
+            int rowsAffected = prpQuery.executeUpdate();
+            return rowsAffected > 0; // вернет true если запись добавлена
+        } catch (SQLException | ClassNotFoundException ex) {
+            System.err.println("Ошибка при добавлении пользователя: " + ex.getMessage());
+            return false;
+        }
+    }
+
     public User getUserInDb(String login, String passvord)
     {
         try(Connection con = ConnectionBD.connectionDB()) {
@@ -158,6 +198,25 @@ public class Controller {
         {
             ex.printStackTrace();
             return null;
+        }
+    }
+
+    public boolean isDeleted(int id, String sql)
+    {
+        try(Connection con = ConnectionBD.connectionDB())
+        {
+            PreparedStatement prpQuery = con.prepareStatement(sql);
+
+            prpQuery.setInt(1, id);
+            int rowAffected = prpQuery.executeUpdate();
+
+            return rowAffected > 0;
+
+        }
+        catch (SQLException | ClassNotFoundException ex)
+        {
+            ex.printStackTrace();
+            return false;
         }
     }
 }

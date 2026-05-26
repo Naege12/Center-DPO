@@ -2,13 +2,8 @@ package centerdpo;
 
 import controller.ConnectionBD;
 import javax.swing.JOptionPane;
-
-import controller.SaveXML;
-import models.Student;
 import view.LoginForm;
 import javax.swing.SwingUtilities;
-import java.util.ArrayList;
-import java.util.List;
 
 public class CenterDPOStrokatov {
     public static void main(String[] args) throws ClassNotFoundException {

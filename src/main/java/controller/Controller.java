@@ -59,6 +59,11 @@ public class Controller {
         }
         return true;
     }
+
+    public boolean addNewProgramCheckAccept(String name, String description, String duration, String category)
+    {
+        return !(name.isEmpty() || description.isEmpty() || duration.isEmpty() || category.isEmpty());
+    }
     
     public int getAccept(String login, String passvord)
     {
@@ -155,6 +160,26 @@ public class Controller {
             return rowsAffected > 0; // вернет true если запись добавлена
         } catch (SQLException | ClassNotFoundException ex) {
             System.err.println("Ошибка при добавлении пользователя: " + ex.getMessage());
+            return false;
+        }
+    }
+
+    public boolean addNewProgram(String name, String description, String duration, String category) {
+        try (Connection con = ConnectionBD.connectionDB()) {
+            String sql = "INSERT INTO \"Program\"(\"Name\", \"Description\", \"Duration\", \"Category\") VALUES (?, ?, ?, ?)";
+            PreparedStatement prpQuery = con.prepareStatement(sql);
+            LocalDate ld = LocalDate.now();
+
+            prpQuery.setString(1, name);
+            prpQuery.setString(2, description);
+            prpQuery.setString(3, duration);
+            prpQuery.setString(4, category);
+
+
+            int rowsAffected = prpQuery.executeUpdate();
+            return rowsAffected > 0; // вернет true если запись добавлена
+        } catch (SQLException | ClassNotFoundException ex) {
+            System.err.println("Ошибка при добавлении программы: " + ex.getMessage());
             return false;
         }
     }

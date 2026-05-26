@@ -107,7 +107,7 @@ public class DeleteStudentForm extends JFrame
         buttonJPanel.setLayout(new BoxLayout(buttonJPanel, BoxLayout.Y_AXIS));
         buttonJPanel.setBorder(new EmptyBorder(80, 20, 90, 20));
 
-        String[]  nameButton = {"Удалить", "Назад"};  // поменял "Применить" на "Удалить"
+        String[]  nameButton = {"Удалить", "Назад"};
         int count = 0;
         for (String item : nameButton) {
             JButton menuButton = new JButton(item);

@@ -4,7 +4,11 @@
  */
 package view;
 
-import javax.swing.JFrame;
+import controller.Controller;
+
+import javax.swing.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -16,6 +20,7 @@ public class AddProgramForm extends javax.swing.JFrame {
      * Creates new form AddProgramForm
      */
     JFrame parentFrame;
+    Controller con = new Controller();
     public AddProgramForm(JFrame j) {
         initComponents();
         parentFrame = j;
@@ -77,6 +82,11 @@ public class AddProgramForm extends javax.swing.JFrame {
 
         addProgramjButton.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         addProgramjButton.setText("Добавить");
+        addProgramjButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addProgramjButtonActionPerformed(evt);
+            }
+        });
 
         addProgramjButton1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         addProgramjButton1.setText("Вернутся");
@@ -162,6 +172,22 @@ public class AddProgramForm extends javax.swing.JFrame {
         this.dispose();
         parentFrame.setVisible(true);
     }//GEN-LAST:event_addProgramjButton1ActionPerformed
+
+    private void addProgramjButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addProgramjButtonActionPerformed
+        if(con.addNewProgramCheckAccept(nameJTextPane.getText(), deskriptionJTextPane.getText(), durationJTextPane.getText(),
+                categoryJTextPane.getText())) {
+
+
+            if (con.addNewProgram(nameJTextPane.getText(), deskriptionJTextPane.getText(), durationJTextPane.getText(), categoryJTextPane.getText())) {
+                JOptionPane.showMessageDialog(this, "Программа успешно добален");
+
+            }
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(this, "Заполниет все поля", "Ошибка" , JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_addProgramjButtonActionPerformed
 
     /**
      * @param args the command line arguments

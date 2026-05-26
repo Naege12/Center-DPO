@@ -1,28 +1,31 @@
 package view;
 
 import controller.ConnectionBD;
-import controller.JTableXmlExporter;
+import controller.Controller;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.*;
 
-public class ProgrammForm extends JFrame {
-
+public class DeleteProgramForm extends JFrame
+{
+    private JTextField idField;
     private JFrame parrentForm;
     private JTable _table;
-    public ProgrammForm(JFrame parrentForm)
+
+    public DeleteProgramForm(JFrame parrentForm)
     {
         this.parrentForm = parrentForm;
-        InitComponent();
+        initComponent();
     }
 
-    void InitComponent()
+    private void initComponent()
     {
-        setTitle("Программы обучения");
+        setTitle("Удаление студента");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(800, 700);
+        setSize(1000, 700);
 
         setLocationRelativeTo(null);
 
@@ -37,6 +40,7 @@ public class ProgrammForm extends JFrame {
         DefaultTableModel table = new DefaultTableModel();
         try(Connection con = ConnectionBD.connectionDB()) {
             String sql = "SELECT" +
+                    "\"id\" as ID, " +
                     "\"Name\" AS name, " +
                     "\"Description\" AS description, " +
                     "\"Duration\" AS duration, " +
@@ -81,75 +85,73 @@ public class ProgrammForm extends JFrame {
 
         mainPanel.add(scrollPane);
 
+        JPanel inputPanel = new JPanel();
+        inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
+        inputPanel.setBorder(new EmptyBorder(80, 20, 90, 20));
+
+        JLabel idLabel = new JLabel("ID:");
+        idLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        inputPanel.add(idLabel);
+        inputPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        idField = new JTextField(15);
+        idField.setFont(new Font("Arial", Font.PLAIN, 14));
+        inputPanel.add(idField);
+
+        mainPanel.add(inputPanel);
+
         JPanel buttonJPanel = new JPanel();
         buttonJPanel.setLayout(new BoxLayout(buttonJPanel, BoxLayout.Y_AXIS));
         buttonJPanel.setBorder(new EmptyBorder(80, 20, 90, 20));
 
-        String[]  nameButton = {"Экспорт в XML", "Добавить", "Удалить", "Назад"};
+        String[]  nameButton = {"Удалить", "Назад"};
         int count = 0;
         for (String item : nameButton) {
             JButton menuButton = new JButton(item);
             menuButton.setSize(80, 30);
             menuButton.setFont(new Font("Arial", Font.PLAIN, 14));
-            if (count == 0) {
-                menuButton.addActionListener(e -> exportToXml());
-            }
 
             if (count == 1)
-                menuButton.addActionListener(e -> {
-                    AddProgramForm programForm = new AddProgramForm(this);
-                    programForm.setVisible(true);
-                    this.dispose();
-                });
-
-            if (count == 2)
-            {
-                menuButton.addActionListener(e -> {
-                    DeleteProgramForm delete = new DeleteProgramForm(this);
-                    delete.setVisible(true);
-                    this.dispose();
-                });
-            }
-
-            if (count == 3)
                 menuButton.addActionListener(e -> {
                     parrentForm.setVisible(true);
                     this.dispose();
                 });
+
+
+            if (count == 0) {
+                menuButton.addActionListener(e -> {
+                    String id = idField.getText();
+                    if (!id.isEmpty()) {
+                        delete(id);
+                        idField.setText("");
+                    } else {
+                        JOptionPane.showMessageDialog(this,
+                                "Введите ID программы",
+                                "Ошибка",
+                                JOptionPane.ERROR_MESSAGE);
+                        idField.setText("");
+                    }
+                });
+            }
+
+
             buttonJPanel.add(menuButton);
             buttonJPanel.add(Box.createRigidArea(new Dimension(0, 10)));
             count++;
         }
 
-
         mainPanel.add(buttonJPanel);
-
-
-
         add(mainPanel, BorderLayout.CENTER);
     }
 
-    private void exportToXml() {
-        if (_table.getRowCount() == 0) {
-            JOptionPane.showMessageDialog(this,
-                    "Нет данных для экспорта",
-                    "Информация",
-                    JOptionPane.INFORMATION_MESSAGE);
-            return;
+    private void delete(String _id)
+    {
+        int id = Integer.parseInt(_id);
+        String sql = "DELETE FROM \"Program\" WHERE \"id\" = ?";
+        Controller con = new Controller();
+        if (con.isDeleted(id, sql))
+        {
+            JOptionPane.showMessageDialog(this, "Программа успешно удалена успешно удален");
         }
-
-
-        JTableXmlExporter.exportAll(
-                _table,
-                "programms",
-                "programm",
-                "programms_export.xml"
-        );
-
-        JOptionPane.showMessageDialog(this,
-                "Экспорт завершён!\nФайл: programms_export.xml",
-                "Успех",
-                JOptionPane.INFORMATION_MESSAGE);
     }
-
 }
